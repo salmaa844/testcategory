@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/b1"
+    tools:context=".EditActivity">
+
+    <!-- Header Layout with Icon and Title -->
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:gravity="center_vertical"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/category"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Category"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <!-- Main Input and Button Layout -->
+    <LinearLayout
+        android:layout_below="@+id/ll1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- ImageView to Display Selected Image -->
+        <ImageView
+            android:id="@+id/ivCategoryImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"
+            android:scaleType="centerCrop"/>
+
+        <!-- Category Name Input Field in CardView -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardBackgroundColor="#EFF5F5"
+            app:cardCornerRadius="15dp">
+
+            <EditText
+                android:id="@+id/etCategoryName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Category Name"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Button to Select Image -->
+        <Button
+            android:id="@+id/btnSelectImage"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Select Image"
+            android:layout_margin="10dp"
+            android:backgroundTint="#497174"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
+
+        <!-- Button to Save Category -->
+        <Button
+            android:id="@+id/btnSaveCategory"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Save change"
+            android:layout_margin="10dp"
+            android:backgroundTint="#497174"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
+    </LinearLayout>
+</RelativeLayout>
