@@ -1,70 +1,113 @@
 package com.example.category_part;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class AddCategoryActivity extends AppCompatActivity {
 
-    private static final int PICK_IMAGE = 1;
-    private ImageView ivCategoryImage;
-    private EditText etCategoryName;
-    private CategoryDatabaseHelper db;
+    EditText etCategoryName;
+    Button btnInsert;
+    String url = "http://192.168.88.10/category.php"; // URL to send category data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_category);
 
-        ivCategoryImage = findViewById(R.id.ivCategoryImage);
-        etCategoryName = findViewById(R.id.etCategoryName);
-        db = new CategoryDatabaseHelper(this);
+        etCategoryName = findViewById(R.id.etCategoryName); // EditText where user enters category name
+        btnInsert = findViewById(R.id.btnInsertCategory); // Button to send category
 
-        // Select image
-        findViewById(R.id.btnSelectImage).setOnClickListener(v -> openGallery());
+        String categoryType = getIntent().getStringExtra("CATEGORY_TYPE");
 
-        // Save category
-        findViewById(R.id.btnSaveCategory).setOnClickListener(v -> saveCategory());
+        // استخدام البيانات (مثال: عرضها أو تخصيص شيء بناءً عليها)
+        Toast.makeText(this, "Category Type: " + categoryType, Toast.LENGTH_SHORT).show();
+        btnInsert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                insertCategory();
+            }
+        });
     }
 
-    // Open gallery to select an image
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, PICK_IMAGE);
-    }
+    private void insertCategory() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Saving category...");
+        progressDialog.show();
 
-    // Save category to the database
-    private void saveCategory() {
-        String name = etCategoryName.getText().toString();
-        if (name.isEmpty() || ivCategoryImage.getDrawable() == null) {
-            Toast.makeText(this, "Please provide both a name and an image", Toast.LENGTH_SHORT).show();
+        final String categoryName = etCategoryName.getText().toString().trim();
+
+        if (TextUtils.isEmpty(categoryName)) {
+            Toast.makeText(this, "Enter a category name", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
             return;
         }
 
-        Bitmap image = ((BitmapDrawable) ivCategoryImage.getDrawable()).getBitmap();
-        db.addCategory(name, image);
-        Toast.makeText(this, "Category added successfully!", Toast.LENGTH_SHORT).show();
-        finish(); // Close activity
+        try {
+            // Encoding the category name to handle special characters
+            String encodedCategoryName = URLEncoder.encode(categoryName, "UTF-8");
+
+            // Construct the URL with category_name as a query parameter
+            String getUrl = url + "?category_name=" + encodedCategoryName;
+
+            // Sending GET request
+            StringRequest request = new StringRequest(Request.Method.GET, getUrl, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.d("Response", response); // Log the response for debugging
+                    if (response.contains("Category inserted successfully!")) {
+                        Toast.makeText(AddCategoryActivity.this, "Category added", Toast.LENGTH_SHORT).show();
+
+                        // After successful insertion, navigate back to CategoryListActivity and refresh
+                        Intent intent = new Intent(AddCategoryActivity.this, CategoryListActivity.class);
+                        startActivity(intent);  // Open CategoryListActivity
+                        finish();  // Close AddCategoryActivity
+                    } else {
+                        Toast.makeText(AddCategoryActivity.this, response, Toast.LENGTH_SHORT).show();
+                    }
+                    progressDialog.dismiss();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("VolleyError", error.toString()); // Log the error for debugging
+                    Toast.makeText(AddCategoryActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                }
+            });
+
+            // Add the request to the request queue
+            RequestQueue requestQueue = Volley.newRequestQueue(AddCategoryActivity.this);
+            requestQueue.add(request);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error encoding the category name", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
+        }
     }
 
-    // Handle selected image
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri selectedImageUri = data.getData();
-            ivCategoryImage.setImageURI(selectedImageUri);
-            ivCategoryImage.setVisibility(View.VISIBLE); // Show image
-        }
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish(); // Close this activity and return to CategoryListActivity
     }
 }

@@ -1,9 +1,10 @@
 package com.example.category_part;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,13 +14,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-
-    public void openAddCategory(View view) {
-        Intent intent = new Intent(this, AddCategoryActivity.class);
-        startActivity(intent);
-    }
-    public void openEditCategory(View view) {
-        Intent intent = new Intent(this, EditActivity.class);
+    public void openCategoryListActivity(View view) {
+        Intent intent = new Intent(MainActivity.this, CategoryListActivity.class);
         startActivity(intent);
     }
 }

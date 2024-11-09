@@ -1,0 +1,61 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="170dp"
+    android:layout_height="150dp"
+    android:layout_margin="20dp"
+    app:cardBackgroundColor="#EFF5F5"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- ImageView for category image -->
+        <ImageView
+            android:id="@+id/ivCategoryImage"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
+
+        <!-- TextView for category name -->
+        <TextView
+            android:id="@+id/tvCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Category Name"
+            android:textColor="#497174"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Edit icon -->
+        <ImageView
+            android:id="@+id/ivEditCategory"
+            android:layout_width="42dp"
+            android:layout_height="26dp"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/edit" />
+
+        <ImageView
+            android:id="@+id/openDeleteCategory"
+            android:layout_width="42dp"
+            android:layout_height="26dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="openDeleteCategory"
+            android:src="@drawable/delete"
+            />
+
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
