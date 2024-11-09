@@ -139,7 +139,7 @@ public class CategoryListActivity extends AppCompatActivity {
     // Method to fetch categories from the server and display them
     private void fetchCategories() {
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("جاري تحميل الفئات...");
+        progressDialog.setMessage("Loading categories...");
         progressDialog.show();
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -188,13 +188,13 @@ public class CategoryListActivity extends AppCompatActivity {
                             categoriesContainer.addView(categoryCard);
                         }
                     } else {
-                        Toast.makeText(CategoryListActivity.this, "فشل في تحميل الفئات", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CategoryListActivity.this, "Failed to load categories", Toast.LENGTH_SHORT).show();
                     }
 
                     progressDialog.dismiss();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Toast.makeText(CategoryListActivity.this, "حدث خطأ أثناء تحميل الفئات", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CategoryListActivity.this, "An error occurred while loading categories", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
             }
@@ -202,7 +202,7 @@ public class CategoryListActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("VolleyError", error.toString());
-                Toast.makeText(CategoryListActivity.this, "خطأ في الاتصال بالخادم", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CategoryListActivity.this, "Error connecting to the server", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
